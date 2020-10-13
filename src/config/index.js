@@ -10,7 +10,7 @@
 const dotenv = require('dotenv');
 const bunyan = require('bunyan');
 
-const APP_NAME = 'Buzzrom';
+const APP_NAME = 'Content Fetcher';
 
 dotenv.config({
     path: '.env'

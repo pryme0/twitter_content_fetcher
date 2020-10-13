@@ -8,6 +8,8 @@
 
 const UserModel = require('../Model/User');
 const { findOneAndUpdate } = require('../Model/User');
+const {NotFoundResponse} = require('../../utilities/ApiResponse');
+const { indexOf } = require('lodash');
 
 /**
  * @class UserRepo
@@ -66,6 +68,29 @@ class userRepo {
 
     static async updateOneById(profileId, data) {
         return UserModel.findOneAndUpdate({ _id: profileId }, data, { new: true })
+    }
+
+     /**
+     * @description A static method to find user by thier socialmedia id
+     * @param ID-the user social media id
+     * @returns {Promise<UserModel>}
+     */
+
+    static async deleteInterstById(profileId, data) {
+        let user = await UserModel.findById(profileId)
+        if(!user) return new NotFoundResponse('user info not found')
+        let sta = user.interests.pull()
+         let interests =  user.interests
+         interests.forEach((dat)=>{
+             if(dat === data){
+                 let index1 =  interests.indexOf(dat)
+                 interests.splice(index1,1)
+                 console.log(interests)
+             }
+         })
+         user.interests = interests
+         let newUser = await user.save() 
+       return newUser.interests
     }
 
 
